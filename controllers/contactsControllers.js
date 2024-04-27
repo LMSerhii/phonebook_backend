@@ -1,9 +1,45 @@
-export const getAllContacts = (req, res) => {};
+import {
+  addContact,
+  getContatcById,
+  listContacts,
+  removeContact,
+  upgradeContact,
+} from "../services/contactsServices.js";
 
-export const getOneContact = (req, res) => {};
+export const getAllContacts = (req, res) => {
+  listContacts();
 
-export const deleteContact = (req, res) => {};
+  res.status(200).json({
+    message: "list contacts",
+  });
+};
 
-export const createContact = (req, res) => {};
+export const getOneContact = (req, res) => {
+  getContatcById();
 
-export const updateContact = (req, res) => {};
+  res.status(200).json({ message: "get one contact" });
+};
+
+export const deleteContact = (req, res) => {
+  removeContact();
+
+  res.status(200).json({
+    message: "delete successfull",
+  });
+};
+
+export const createContact = (req, res) => {
+  addContact();
+
+  res.status(201).json({
+    message: "create contact",
+  });
+};
+
+export const updateContact = (req, res) => {
+  upgradeContact();
+
+  res.status(200).json({
+    message: "update successfull",
+  });
+};

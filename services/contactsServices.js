@@ -1,9 +1,12 @@
-export const listContacts = () => console.log("listConatcs");
+import { Contact } from "../models/contactModel.js";
 
-export const getContatcById = () => console.log("getContatcById");
+export const listContacts = (body) => Contact.find(body);
 
-export const removeContact = () => console.log("removeContact");
+export const getContactById = (id) => Contact.findById(id);
 
-export const addContact = () => console.log("addContact");
+export const removeContact = (id) => Contact.findByIdAndDelete(id);
 
-export const upgradeContact = () => console.log("updateContact");
+export const addContact = (body) => Contact.create(body);
+
+export const upgradeContact = (id, body) =>
+  Contact.findByIdAndUpdate(id, body, { new: true });

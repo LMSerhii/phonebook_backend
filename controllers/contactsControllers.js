@@ -1,45 +1,35 @@
-import {
-  addContact,
-  getContatcById,
-  listContacts,
-  removeContact,
-  upgradeContact,
-} from "../services/contactsServices.js";
-
 export const getAllContacts = (req, res) => {
-  listContacts();
+  const { contacts } = req;
 
-  res.status(200).json({
-    message: "list contacts",
-  });
+  res.status(200).json(contacts);
 };
 
 export const getOneContact = (req, res) => {
-  getContatcById();
+  const { contact } = req;
 
-  res.status(200).json({ message: "get one contact" });
+  res.status(200).json(contact);
 };
 
 export const deleteContact = (req, res) => {
-  removeContact();
+  const { status, message } = req.result;
 
-  res.status(200).json({
-    message: "delete successfull",
-  });
+  res.status(status).json(message);
 };
 
 export const createContact = (req, res) => {
-  addContact();
+  const { contact } = req;
 
-  res.status(201).json({
-    message: "create contact",
-  });
+  res.status(201).json(contact);
 };
 
 export const updateContact = (req, res) => {
-  upgradeContact();
+  const { contact } = req.contact;
 
-  res.status(200).json({
-    message: "update successfull",
-  });
+  res.status(200).json(contact);
+};
+
+export const updateFavorite = (req, res) => {
+  const { contact } = req.contact;
+
+  res.status(200).json(contact);
 };

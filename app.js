@@ -2,17 +2,20 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+
 import contactsRouter from "./routes/contactsRouters.js";
 
 dotenv.config();
 
-const { PORT } = process.env;
+const { PORT, MONGODB_URL } = process.env;
 
 const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 // Routes
 const pathPrefix = "/api/v1";
@@ -31,7 +34,24 @@ app.use((err, req, res, next) => {
 
 // Server connection
 const port = PORT || 3000;
+const uri = MONGODB_URL;
 
-app.listen(port, () => {
-  console.log(`Server is running. Use our API on port: ${port}`);
-});
+const clientOptions = {
+  // serverApi: { version: "1", strict: true, deprecationErrors: true },
+};
+
+const run = async () => {
+  try {
+    await mongoose.connect(uri, clientOptions);
+    console.log("Database connected ...");
+
+    app.listen(port, () => {
+      console.log(`Server is running. Use our API on port: ${port}`);
+    });
+  } catch (error) {
+    console.error("Error connecting to database:", error);
+    process.exit(1); // Завершити процес з помилкою
+  }
+};
+
+run().catch(console.dir);

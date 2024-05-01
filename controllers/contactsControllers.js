@@ -1,13 +1,13 @@
 export const getAllContacts = (req, res) => {
   const { contacts } = req;
 
-  res.status(200).json(contacts);
+  res.json(contacts);
 };
 
 export const getOneContact = (req, res) => {
   const { contact } = req;
 
-  res.status(200).json(contact);
+  res.json(contact);
 };
 
 export const deleteContact = (req, res) => {
@@ -25,11 +25,11 @@ export const createContact = (req, res) => {
 export const updateContact = (req, res) => {
   const { contact } = req.contact;
 
-  res.status(200).json(contact);
+  res.json(contact);
 };
 
 export const updateFavorite = (req, res) => {
   const { contact } = req.contact;
 
-  res.status(200).json(contact);
+  res.json(contact);
 };

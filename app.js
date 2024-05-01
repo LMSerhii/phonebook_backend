@@ -4,7 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-import contactsRouter from "./routes/contactsRouters.js";
+import contactsRouter from "./routes/contactsRouter.js";
+import authRouter from "./routes/usersRouter.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.static("public"));
 // Routes
 const pathPrefix = "/api/v1";
 
+app.use(`${pathPrefix}/users`, authRouter);
 app.use(`${pathPrefix}/contacts`, contactsRouter);
 
 // Error handles

@@ -3,11 +3,16 @@ import {
   current,
   login,
   logout,
+  resendVerifyController,
   signup,
   verifyByEmailController,
 } from "../controllers/userControllers.js";
 import validateBody from "../utils/validateBody.js";
-import { loginUserSchema, sigupUserSchema } from "../schemas/usersSchemas.js";
+import {
+  emailUserSchema,
+  loginUserSchema,
+  sigupUserSchema,
+} from "../schemas/usersSchemas.js";
 import {
   loginUserModdleware,
   logoutUserMiddleware,
@@ -15,6 +20,8 @@ import {
 } from "../middlewares/usersMiddlewares.js";
 import {
   auth,
+  resendVerifyEmailMiddleware,
+  sendVerifyEmail,
   verifyByEmailMiddleware,
 } from "../middlewares/authMiddlewares.js";
 
@@ -24,11 +31,23 @@ authRouter.post(
   "/signup",
   validateBody(sigupUserSchema),
   signUpUserMiddleware,
-  verifyByEmailMiddleware,
+  sendVerifyEmail,
   signup
 );
 
-authRouter.post("/verify/:verificationToken", verifyByEmailController);
+authRouter.get(
+  "/verify/:verificationToken",
+  verifyByEmailMiddleware,
+  verifyByEmailController
+);
+
+authRouter.post(
+  "/verify",
+  validateBody(emailUserSchema),
+  resendVerifyEmailMiddleware,
+  sendVerifyEmail,
+  resendVerifyController
+);
 
 authRouter.post(
   "/login",

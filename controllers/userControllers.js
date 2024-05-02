@@ -39,3 +39,9 @@ export const verifyByEmailController = (req, res) => {
 export const resendVerifyController = (req, res) => {
   res.json({ message: "Verification email sent" });
 };
+
+export const updateAvatarController = (req, res) => {
+  const { avatar } = req.user;
+
+  res.json({ avatar });
+};

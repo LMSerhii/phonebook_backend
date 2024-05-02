@@ -35,3 +35,6 @@ export const verifyUserToken = async (token) => {
 
   return user;
 };
+
+export const updatingAvatar = (id, avatar) =>
+  User.findByIdAndUpdate(id, { avatar }, { new: true });

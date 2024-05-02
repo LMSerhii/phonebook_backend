@@ -28,3 +28,9 @@ export const emailUserSchema = Joi.object({
     .required()
     .error(new Error("missing required field email")),
 });
+
+export const updateAvatarSchema = Joi.object({
+  avatar: Joi.string()
+    .required()
+    .error(new Error("Avatar is a required field")),
+});

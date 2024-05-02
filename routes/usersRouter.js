@@ -5,6 +5,7 @@ import {
   logout,
   resendVerifyController,
   signup,
+  updateAvatarController,
   verifyByEmailController,
 } from "../controllers/userControllers.js";
 import validateBody from "../utils/validateBody.js";
@@ -14,9 +15,10 @@ import {
   sigupUserSchema,
 } from "../schemas/usersSchemas.js";
 import {
-  loginUserModdleware,
+  loginUserMiddleware,
   logoutUserMiddleware,
   signUpUserMiddleware,
+  updateAvatarMiddleware,
 } from "../middlewares/usersMiddlewares.js";
 import {
   auth,
@@ -24,6 +26,7 @@ import {
   sendVerifyEmail,
   verifyByEmailMiddleware,
 } from "../middlewares/authMiddlewares.js";
+import { upload } from "../middlewares/uploadMiddleware.js";
 
 const authRouter = express.Router();
 
@@ -52,11 +55,20 @@ authRouter.post(
 authRouter.post(
   "/login",
   validateBody(loginUserSchema),
-  loginUserModdleware,
+  loginUserMiddleware,
   login
 );
 
 authRouter.post("/logout", auth, logoutUserMiddleware, logout);
+
 authRouter.get("/current", auth, current);
+
+authRouter.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  updateAvatarMiddleware,
+  updateAvatarController
+);
 
 export default authRouter;

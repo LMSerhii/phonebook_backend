@@ -1,3 +1,4 @@
+import { getContactById } from "../services/contactsServices.js";
 import { sendEmail } from "../services/emailServices.js";
 import {
   findUserByEmailService,
@@ -17,7 +18,7 @@ export const auth = catchAsync(async (req, res, next) => {
 
   const user = await verifyUserToken(token);
 
-  if (!user || !user.token || user.token !== token) throw HttpError(401);
+  if (!user || !user.token || user.token !== token) return next(HttpError(401));
 
   req.user = user;
   next();
@@ -65,3 +66,20 @@ export const resendVerifyEmailMiddleware = catchAsync(
     next();
   }
 );
+
+export const verifyOwner = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { _id: owner } = req.user;
+
+  const contact = await getContactById(id);
+
+  if (!contact) return next(HttpError(404, "Contact not found"));
+
+  const isEqual = contact.owner.toString() === owner.toString();
+
+  if (!isEqual) return next(HttpError(404));
+
+  req.contact = contact;
+
+  next();
+});

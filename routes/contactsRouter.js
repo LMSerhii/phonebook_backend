@@ -9,34 +9,39 @@ import {
   updateFavorite,
 } from "../controllers/contactsControllers.js";
 import {
-  cutContact,
-  findContact,
-  findContacts,
   isValiId,
-  makeContact,
-  refreshContact,
   validateCreateContact,
   validateUpdateContact,
+  validateUpdateFavorite,
 } from "../middlewares/contactsMiddlewares.js";
+import { auth, verifyOwner } from "../middlewares/authMiddlewares.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", findContacts, getAllContacts);
+contactsRouter.get("/", auth, getAllContacts);
 
-contactsRouter.get("/:id", isValiId, findContact, getOneContact);
+contactsRouter.post("/", auth, validateCreateContact, createContact);
 
-contactsRouter.delete("/:id", isValiId, cutContact, deleteContact);
+contactsRouter.get("/:id", isValiId, auth, verifyOwner, getOneContact);
 
-contactsRouter.post("/", validateCreateContact, makeContact, createContact);
+contactsRouter.delete("/:id", isValiId, auth, verifyOwner, deleteContact);
 
 contactsRouter.put(
   "/:id",
   isValiId,
+  auth,
+  verifyOwner,
   validateUpdateContact,
-  refreshContact,
   updateContact
 );
 
-contactsRouter.patch("/:id/favorite", isValiId, updateFavorite);
+contactsRouter.patch(
+  "/:id/favorite",
+  isValiId,
+  auth,
+  verifyOwner,
+  validateUpdateFavorite,
+  updateFavorite
+);
 
 export default contactsRouter;

@@ -1,8 +1,26 @@
-export const getAllContacts = (req, res) => {
-  const { contacts } = req;
+import {
+  addContact,
+  listContacts,
+  removeContact,
+  upgradeContact,
+} from "../services/contactsServices.js";
+import { catchAsync } from "../utils/catchAsync.js";
+
+export const getAllContacts = catchAsync(async (req, res) => {
+  const { _id: owner } = req.user;
+
+  const contacts = await listContacts(owner, req.query);
 
   res.json(contacts);
-};
+});
+
+export const createContact = catchAsync(async (req, res) => {
+  const { _id: owner } = req.user;
+
+  const contact = await addContact({ ...req.body, owner });
+
+  res.status(201).json(contact);
+});
 
 export const getOneContact = (req, res) => {
   const { contact } = req;
@@ -10,26 +28,27 @@ export const getOneContact = (req, res) => {
   res.json(contact);
 };
 
-export const deleteContact = (req, res) => {
-  const { status, message } = req.result;
+export const deleteContact = catchAsync(async (req, res) => {
+  const { _id: id } = req.contact;
 
-  res.status(status).json(message);
-};
+  await removeContact(id);
 
-export const createContact = (req, res) => {
-  const { contact } = req;
+  res.sendStatus(204);
+});
 
-  res.status(201).json(contact);
-};
+export const updateContact = catchAsync(async (req, res) => {
+  const { _id: id } = req.contact;
 
-export const updateContact = (req, res) => {
-  const { contact } = req.contact;
+  const contact = await upgradeContact(id, req.body);
 
   res.json(contact);
-};
+});
 
-export const updateFavorite = (req, res) => {
-  const { contact } = req.contact;
+export const updateFavorite = catchAsync(async (req, res) => {
+  const { _id: id } = req.contact;
+  const { favorite } = req.body;
+
+  const contact = await upgradeContact(id, { favorite });
 
   res.json(contact);
-};
+});

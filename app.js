@@ -52,7 +52,7 @@ const run = async () => {
     });
   } catch (error) {
     console.error("Error connecting to database:", error);
-    process.exit(1); // Завершити процес з помилкою
+    process.exit(1);
   }
 };
 
